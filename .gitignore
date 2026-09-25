@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+dist/
+.sites-runtime/
+__pycache__/
+*.pyc
+.claude/
+.cursor/
+scripts/.private-denylist

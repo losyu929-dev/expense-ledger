@@ -1,0 +1,16 @@
+{
+  "name": "expense-ledger-public",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Self-hosted Google Apps Script expense ledger dashboard (Traditional Chinese / Hong Kong)",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-google-apps-script.mjs",
+    "check": "node scripts/check-google-apps-script.mjs",
+    "build:check": "npm run build && npm run check"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
