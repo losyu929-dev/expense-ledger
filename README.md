@@ -23,6 +23,7 @@
 ```text
 expense-ledger-public/
   README.md
+  AI-SETUP-PROMPT.md    ← 複製俾 AI、由 AI 帶你安裝
   LICENSE
   SECURITY.md
   package.json
@@ -45,6 +46,8 @@ expense-ledger-public/
 ---
 
 ## 自架步驟（由零開始）
+
+> **唔熟技術？** 將 [`AI-SETUP-PROMPT.md`](AI-SETUP-PROMPT.md) 入面嘅 prompt 複製俾 ChatGPT、Claude 或 Gemini，AI 會用廣東話一步一步帶你完成下面所有步驟。
 
 ### 0. 準備
 
@@ -154,6 +157,7 @@ npm run check   # 斷言：Script Properties、無個人 ID／token、$' + money
 ## English (short self-host guide)
 
 1. Create a Google Sheet with tabs **Transactions** (26 headers) and **Source Events** (16 headers) — see `docs/SHEET-SCHEMA.md` / `sheet-template/`. A copyable blank template Sheet link will be added here soon.
+   Not technical? Paste the prompt in `AI-SETUP-PROMPT.md` into any AI chat and it will guide you step by step (in Cantonese; ask it to answer in English if you prefer).
 2. `npm run build && npm run check`.
 3. New Apps Script project: paste `apps-script/Code.gs` and HTML file named **`Index`** from `apps-script/Index.html`.
 4. Set Script Property **`SPREADSHEET_ID`** (Project Settings → Script properties).
