@@ -1,0 +1,13 @@
+Transaction Type,Status,Verification Level,Refund Status,Source Type,Category
+Expense,Pending,1 source,No,Wallet Notification,Dining
+Refund,Partially Matched,2 sources,Partial,Bank Notification,Groceries
+Income,Verified,3+ sources,Full,Bank Email,Transport
+Transfer,Enriched,Manual verified,,Merchant Email,Shopping
+,Final,,,Manual,Subscriptions
+,Needs Review,,,,Bills
+,Example,,,,Health
+,,,,,Home
+,,,,,Entertainment
+,,,,,Travel
+,,,,,Pets
+,,,,,Other

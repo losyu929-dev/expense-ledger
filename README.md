@@ -39,7 +39,7 @@ expense-ledger-public/
   docs/
     SHEET-SCHEMA.md
     ARCHITECTURE.md
-  sheet-template/       ← 空白表頭（無真實交易）
+  sheet-template/       ← 空白表頭同選項清單（無真實交易）
 ```
 
 ---
@@ -61,6 +61,8 @@ npm run check
 成功會見到 `PASS public Google Apps Script package...`。
 
 ### 1. 建立 Google Sheet
+
+> **即將提供：** 一個可以直接「檔案 → 建立副本」嘅空白 Google Sheet 範本連結（已包含分頁、表頭、公式、下拉選單同示範列）會稍後加入呢度。未有連結前，請按下面步驟自己建立。
 
 1. 開新試算表，建議名稱例如「我的記帳簿」。
 2. 檔案 → 設定 → 時區選 **香港**（`Asia/Hong_Kong`）。
@@ -151,7 +153,7 @@ npm run check   # 斷言：Script Properties、無個人 ID／token、$' + money
 
 ## English (short self-host guide)
 
-1. Create a Google Sheet with tabs **Transactions** (26 headers) and **Source Events** (16 headers) — see `docs/SHEET-SCHEMA.md` / `sheet-template/`.
+1. Create a Google Sheet with tabs **Transactions** (26 headers) and **Source Events** (16 headers) — see `docs/SHEET-SCHEMA.md` / `sheet-template/`. A copyable blank template Sheet link will be added here soon.
 2. `npm run build && npm run check`.
 3. New Apps Script project: paste `apps-script/Code.gs` and HTML file named **`Index`** from `apps-script/Index.html`.
 4. Set Script Property **`SPREADSHEET_ID`** (Project Settings → Script properties).

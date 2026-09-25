@@ -1,1 +1,1 @@
-Review ID,Created At,Reason,Event ID,Priority,Assigned,Status,Notes,Reserved1,Reserved2,Reserved3,Resolved,Resolution Note
+Review ID,Created At,Object Type,Object ID,Reason,Amount,Currency,Merchant,Suggested Match,Confidence,Recommended Action,Resolved,Resolution Notes
