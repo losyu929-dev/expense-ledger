@@ -24,7 +24,7 @@ Dashboard `getLedger()` 讀取 A–Z 共 26 欄；表頭必須喺第 1 列。
 | 7 | H | `Original Merchant` | 來源解析商戶；編輯時通常保留 |
 | 8 | I | `Category` | 見下方類別白名單 |
 | 9 | J | `Subcategory` | 商品／用途（Dashboard「買咗乜」） |
-| 10 | K | `Payment Method` | 渠道，如 PayMe、HSBC HK |
+| 10 | K | `Payment Method` | 渠道名稱（例如銀行或電子錢包名） |
 | 11 | L | `Card Last4` | 卡尾四位（建議純文字） |
 | 12 | M | `AI Remark` | AI／自動入帳備註；人手編輯唔會覆寫 |
 | 13 | N | `Manual Remark` | 使用者備註 |

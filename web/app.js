@@ -20,14 +20,16 @@ function setPage(p){page=p;all('.page').forEach(n=>n.hidden=n.id!==p);all('nav b
 all('[data-page]').forEach(b=>b.onclick=()=>setPage(b.dataset.page));all('[data-go]').forEach(b=>b.onclick=()=>setPage(b.dataset.go));
 function row(r,event=false){if(incomeHidden&&(event||incomeRow(r,event)))return '<div class="hidden-income">◉ '+(event?'通知內容已隱藏':'收入記錄已隱藏')+'</div>';const id=r[event?'Event ID':'Transaction ID'],merchant=r[event?'Parsed Merchant':'Clean Merchant']||'未識別商戶',a=r[event?'Parsed Amount':'Amount'];const linked=event&&r['Matched Transaction ID'];const pending=event&&!linked;const t=event?'':r.Type;const note=event?'':r['Manual Remark']||r['AI Remark'];return `<article class="record"><div class="record-top"><span class="avatar">${esc(merchant.slice(0,1))}</span><div class="record-info"><strong>${esc(merchant)}</strong><small>${esc(date(r[event?'Event Time':'Date'])||'日期待確認')} · ${esc(event?r['Source App / Sender']:cn[r.Category]||r.Category)}</small></div><div class="amount ${t==='Income'||t==='Refund'?'income':''}">${t==='Income'||t==='Refund'?'+':''}${esc(r.Currency)} ${typeof a==='number'?money(a):'待確認'}<small class="record-state ${pending?'pending':'confirmed'}"><i class="status-dot ${pending?'red':''}" aria-hidden="true"></i>${pending?'待確認':linked?'已入帳':esc(types[t]||t)}</small></div></div><div class="record-bottom"><p>${esc(event?(pending?'已保存原文，未計入收支':'來源通知已保留'):(r.Subcategory||note||'可補充商品或備註'))}</p><button data-edit="${esc(linked||id)}" data-source="${event&&!linked?'event':'transaction'}">${pending?'核實分類':'編輯'}</button></div>${event?`<details><summary>原始通知 · ${typeof r['Parser Confidence']==='number'?Math.round(r['Parser Confidence']*100)+'% 抽取信心':'未提供信心分數'}</summary><pre>${incomeHidden?'私隱模式已隱藏通知原文；顯示收入後可查看。':esc(r['Raw Text'])}</pre></details>`:''}</article>`}
 function categories(rs){const cats={};rs.filter(r=>r.Type==='Expense'&&typeof r.Amount==='number').forEach(r=>cats[r.Category||'Other']=(cats[r.Category||'Other']||0)+Math.abs(r.Amount));const total=Object.values(cats).reduce((a,b)=>a+b,0);return Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,a])=>`<div class="category"><div class="category-head"><span>${esc(cn[c]||c)}<small>${Math.round(a/total*100)}%</small></span><strong>$${money(a)}</strong></div><div class="bar"><span style="width:${a/total*100}%"></span></div></div>`).join('')||empty('本月未有已核實支出。')}
+// Payment channel display names. Edit this list to match the banks / wallets you use.
+// Each entry: [regex matched against the Payment Method text, name to show].
+// The first match wins; anything unmatched is shown as written.
+const CHANNEL_ALIASES=[
+ [/^(?:apple\s*)?wallet$/i,'Apple Wallet（銀行未識別）'],
+ [/^(?:google\s*)?wallet$|google\s*pay/i,'Google Wallet'],
+];
 function channelName(value){
  const name=String(value||'').trim();
- if(/pay\s*me/i.test(name))return 'PayMe';
- if(/\bmox\b/i.test(name))return 'Mox';
- if(/hsbc|滙豐|匯豐/i.test(name))return 'HSBC';
- if(/渣打|standard\s*chartered|sc\s*mobile|\bscb\b|cathay|國泰/i.test(name))return '渣打';
- if(/octopus|八達通/i.test(name))return '八達通';
- if(/^(?:apple\s*)?wallet$/i.test(name))return 'Apple Wallet（銀行未識別）';
+ for(const [re,label] of CHANNEL_ALIASES)if(re.test(name))return label;
  return name||'未指定渠道';
 }
 function paymentGroups(rows){const groups=new Map();for(const r of rows){const name=channelName(r['Payment Method']);if(!groups.has(name))groups.set(name,[]);groups.get(name).push(r)}return [...groups.entries()]}

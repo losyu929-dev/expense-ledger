@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const code = fs.readFileSync(path.join(root, 'apps-script', 'Code.gs'), 'utf8');
@@ -38,9 +39,23 @@ for (const [re, label] of bannedPatterns) {
 // scripts/.private-denylist (one per line). That file is gitignored.
 const denyFile = path.join(root, 'scripts', '.private-denylist');
 if (fs.existsSync(denyFile)) {
-  const everything = bundled + fs.readFileSync(path.join(root, 'README.md'), 'utf8');
-  for (const line of fs.readFileSync(denyFile, 'utf8').split(/\r?\n/).map(x => x.trim()).filter(Boolean)) {
-    assert.equal(everything.includes(line), false, 'private denylist entry present');
+  // Scan every file git tracks (falls back to a directory walk outside a git checkout).
+  let files;
+  try {
+    files = execFileSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean);
+  } catch {
+    const walk = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(e =>
+      ['.git', 'node_modules'].includes(e.name) ? [] :
+      e.isDirectory() ? walk(path.join(d, e.name)) : [path.relative(root, path.join(d, e.name))]);
+    files = walk(root);
+  }
+  files = files.filter(f => f !== path.join('scripts', '.private-denylist'));
+  const needles = fs.readFileSync(denyFile, 'utf8').split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+  for (const f of files) {
+    const text = fs.readFileSync(path.join(root, f), 'utf8');
+    for (const needle of needles) {
+      assert.equal(text.includes(needle), false, 'private denylist entry present in ' + f);
+    }
   }
 }
 
